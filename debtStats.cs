@@ -81,11 +81,16 @@ namespace P1
         {
             set
             {
-                if (matriculation != DEFAULT_MATRIC)
-                    if (value <= MIN_DATE && value >= MAX_DATE)
-                        matriculation = value;
-                    else
+                if (matriculation == DEFAULT_MATRIC)
+                {
+                    while (value < MIN_DATE || value > MAX_DATE)
+                    {
                         Console.WriteLine("Error. Date must be in DDMMYYYY format.");
+                        Console.Write("Please reenter date: ");
+                        value = Convert.ToInt32(Console.ReadLine());
+                    }
+                        matriculation = value;
+                }
                 else
                     Console.WriteLine("Error. Matriculation date has already been set.");
             }

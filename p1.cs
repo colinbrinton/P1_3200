@@ -22,7 +22,14 @@ namespace P1
                 Console.Write("Enter the student ID for student ");
                 Console.Write(studentCount + COUNT_OFFSET);
                 Console.Write(": ");
-               studentDebts[studentCount].StudentID = Convert.ToInt32(Console.ReadLine());
+                studentDebts[studentCount].StudentID = Convert.ToInt32(Console.ReadLine());
+
+                Console.Write("Enter the matriculation date for student ");
+                Console.Write(studentCount + COUNT_OFFSET);
+                Console.Write(" (DDMMYYY): ");
+                studentDebts[studentCount].Matriculation = Convert.ToInt32(Console.ReadLine());
+
+
                ++studentCount;
             }
 
