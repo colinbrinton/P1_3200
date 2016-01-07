@@ -26,11 +26,16 @@ namespace P1
         {
             set
             {
-                if (studentID != DEFAULT_ID)
-                    if (value < ID_MAX && value >= ID_MIN)
-                        studentID = value;
-                    else
+                if (studentID == DEFAULT_ID)
+                {
+                    while (value >= ID_MAX || value < ID_MIN)
+                    {
                         Console.WriteLine("Error. ID must be a six digit, positive number.");
+                        Console.Write("Please reenter ID: ");
+                        value = Convert.ToInt32(Console.ReadLine());
+                    }
+                    studentID = value;
+                }
                 else
                     Console.WriteLine("Error. Student ID has already been set.");
             }
@@ -146,7 +151,13 @@ namespace P1
 
         public void deactivate()
         {
-
+            studentID = DEFAULT_ID;
+            origLoan = DEFAULT_LOAN;
+            currLoan = DEFAULT_LOAN;
+            origGrant = DEFAULT_GRANT;
+            matriculation = DEFAULT_MATRIC;
+            anticGrad = DEFAULT_GRAD;
+            origGrad = DEFAULT_GRAD;
         }
 
         public bool debtExceed()
