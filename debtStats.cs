@@ -8,13 +8,17 @@ namespace P1
         const sbyte LOAN_DECREASE = -1;
         const sbyte NO_LOAN_CHNG = 0;
         const int DEBT_CAP = 100000;
-        const int DEFAULT_LOAN = 0;
-        const int DEFAULT_GRANT = 0;
-        const int DEFAULT_MATRIC = 0;
-        const int DEFAULT_GRAD = 0;
-        const int DEFAULT_ID = 000000;
-        //const int ID_MIN = 100000;
-        //const int ID_MAX = 1000000;
+        const int DEFAULT_LOAN = -1;
+        const int DEFAULT_GRANT = -1;
+        const int DEFAULT_MATRIC = -1;
+        const int DEFAULT_GRAD = -1;
+        const int DEFAULT_ID = -1;
+        const int ID_MIN = 100000;
+        const int ID_MAX = 1000000;
+        const int MIN_LOAN = 0;
+        const int MIN_GRANT = 0;
+        const int MIN_DATE = 01000000;
+        const int MAX_DATE = 12319999;
 
 
         private int studentID;
@@ -22,22 +26,90 @@ namespace P1
         {
             set
             {
-                studentID = value;
+                if (studentID != DEFAULT_ID)
+                    if (value < ID_MAX && value >= ID_MIN)
+                        studentID = value;
+                    else
+                        Console.WriteLine("Error. ID must be a six digit, positive number.");
+                else
+                    Console.WriteLine("Error. Student ID has already been set.");
             }
         }
-        int origLoan;
-        int currLoan;
+        private int origLoan;
+        public int OrigLoan
+        {
+            set
+            {
+                if (origLoan != DEFAULT_LOAN)
+                    if (value >= MIN_LOAN)
+                        origLoan = value;
+                    else
+                        Console.WriteLine("Error. Loan must be positive.");
+                else
+                    Console.WriteLine("Error. Original Loan value has already been set.");
+            }
+        }
+        private int currLoan;
         public int CurrLoan
         {
             set
             {
-                currLoan = value;
+                if (value >= MIN_LOAN)
+                    currLoan = value;
+                else
+                    Console.WriteLine("Error. Loan must be positive.");
             }
         }
-        int origGrant;
-        int matriculation;
-        int anticGrad;
-        int origGrad;
+        private int origGrant;
+        public int OrigGrant
+        {
+            set
+            {
+                if (value >= MIN_GRANT)
+                    origGrad = value;
+                else
+                    Console.WriteLine("Error. Grant must be positive.");
+            }
+        }
+        private int matriculation;
+        public int Matriculation
+        {
+            set
+            {
+                if (matriculation != DEFAULT_MATRIC)
+                    if (value <= MIN_DATE && value >= MAX_DATE)
+                        matriculation = value;
+                    else
+                        Console.WriteLine("Error. Date must be in DDMMYYYY format.");
+                else
+                    Console.WriteLine("Error. Matriculation date has already been set.");
+            }
+        }
+        private int anticGrad;
+        public int AnticGrad
+        {
+            set
+            {
+                if (value <= MIN_DATE && value >= MAX_DATE)
+                    anticGrad = value;
+                else
+                    Console.WriteLine("Error. Date must be in DDMMYYYY format.");
+            }
+        }
+        private int origGrad;
+        public int OrigGrad
+        {
+            set
+            {
+                if (origGrad != DEFAULT_GRAD)
+                    if (value <= MIN_DATE && value >= MAX_DATE)
+                        OrigGrad = value;
+                    else
+                        Console.WriteLine("Error. Date must be in DDMMYYYY format.");
+                else
+                    Console.WriteLine("Error. Original graduation date has already been set.");
+            }
+        }
         
         public debtStats(int id = DEFAULT_ID, int loan = DEFAULT_LOAN, int grant = DEFAULT_GRANT, 
             int matric = DEFAULT_MATRIC, int grad = DEFAULT_GRAD)
