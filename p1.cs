@@ -18,7 +18,9 @@ namespace P1
 
             foreach (debtStats element in studentDebts)
             {
+                Console.WriteLine();
                 studentDebts[studentCount] = new debtStats();
+
                 Console.Write("Enter the student ID for student ");
                 Console.Write(studentCount + COUNT_OFFSET);
                 Console.Write(": ");
@@ -29,9 +31,33 @@ namespace P1
                 Console.Write(" (DDMMYYY): ");
                 studentDebts[studentCount].Matriculation = Convert.ToInt32(Console.ReadLine());
 
+                Console.Write("Enter the anticipated graduation date for student ");
+                Console.Write(studentCount + COUNT_OFFSET);
+                Console.Write(" (DDMMYYY): ");
+                studentDebts[studentCount].OrigGrad = Convert.ToInt32(Console.ReadLine());
+
+                Console.Write("Enter the loan amount for student ");
+                Console.Write(studentCount + COUNT_OFFSET);
+                Console.Write(": $");
+                studentDebts[studentCount].OrigLoan = Convert.ToInt32(Console.ReadLine());
+
+                Console.Write("Enter the grant amount for student ");
+                Console.Write(studentCount + COUNT_OFFSET);
+                Console.Write(": $");
+                studentDebts[studentCount].OrigGrant = Convert.ToInt32(Console.ReadLine());
 
                ++studentCount;
+
             }
+
+            Console.WriteLine();
+            Console.WriteLine("Please enter the ID of the student whose loan amount you with to update: ");
+            int tempID = Convert.ToInt32(Console.ReadLine());
+            studentCount = COUNT_START;
+
+            //if (studentDebts[studentCount].idMatch(tempID))
+
+
 
         }
     }

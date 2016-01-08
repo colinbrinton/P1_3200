@@ -45,11 +45,17 @@ namespace P1
         {
             set
             {
-                if (origLoan != DEFAULT_LOAN)
-                    if (value >= MIN_LOAN)
-                        origLoan = value;
-                    else
+                if (origLoan == DEFAULT_LOAN)
+                {
+                    while (value < MIN_LOAN)
+                    {
                         Console.WriteLine("Error. Loan must be positive.");
+                        Console.Write("Please reenter loan: $");
+                        value = Convert.ToInt32(Console.ReadLine());
+                    }
+                    origLoan = value;
+                    currLoan = value;
+                }
                 else
                     Console.WriteLine("Error. Original Loan value has already been set.");
             }
@@ -59,10 +65,13 @@ namespace P1
         {
             set
             {
-                if (value >= MIN_LOAN)
-                    currLoan = value;
-                else
+                while (value < MIN_LOAN)
+                {
                     Console.WriteLine("Error. Loan must be positive.");
+                    Console.Write("Please reenter loan: $");
+                    value = Convert.ToInt32(Console.ReadLine());
+                }
+                currLoan = value;
             }
         }
         private int origGrant;
@@ -70,10 +79,13 @@ namespace P1
         {
             set
             {
-                if (value >= MIN_GRANT)
-                    origGrad = value;
-                else
+                while (value < MIN_GRANT)
+                {
                     Console.WriteLine("Error. Grant must be positive.");
+                    Console.Write("Please reenter grant: $");
+                    value = Convert.ToInt32(Console.ReadLine());
+                }
+                origGrad = value;
             }
         }
         private int matriculation;
@@ -100,10 +112,13 @@ namespace P1
         {
             set
             {
-                if (value <= MIN_DATE && value >= MAX_DATE)
-                    anticGrad = value;
-                else
+                while (value < MIN_DATE || value > MAX_DATE)
+                {
                     Console.WriteLine("Error. Date must be in DDMMYYYY format.");
+                    Console.Write("Please reenter date: ");
+                    value = Convert.ToInt32(Console.ReadLine());
+                }
+                anticGrad = value;
             }
         }
         private int origGrad;
@@ -111,11 +126,17 @@ namespace P1
         {
             set
             {
-                if (origGrad != DEFAULT_GRAD)
-                    if (value <= MIN_DATE && value >= MAX_DATE)
-                        OrigGrad = value;
-                    else
+                if (origGrad == DEFAULT_GRAD)
+                {
+                    while (value < MIN_DATE || value > MAX_DATE)
+                    {
                         Console.WriteLine("Error. Date must be in DDMMYYYY format.");
+                        Console.Write("Please reenter date: ");
+                        value = Convert.ToInt32(Console.ReadLine());
+                    }
+                    origGrad = value;
+                    anticGrad = value;
+                }
                 else
                     Console.WriteLine("Error. Original graduation date has already been set.");
             }
@@ -172,5 +193,12 @@ namespace P1
             return false;
         }
 
+        public bool idMatch(int sID)
+        {
+            if (sID == studentID)
+                return true;
+            return false;
+        }
     }
+
 }
