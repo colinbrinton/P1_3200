@@ -7,7 +7,9 @@ namespace P1
         const sbyte LOAN_INCREASE = 1;
         const sbyte LOAN_DECREASE = -1;
         const sbyte NO_LOAN_CHNG = 0;
-        const int DEBT_CAP = 100000;
+        const int DEFAULT_DEBT_CAP = -1;
+        const bool DEFAULT_THRESH = false;
+        const bool OVER_THRESH = true;
         const int DEFAULT_LOAN = -1;
         const int DEFAULT_GRANT = -1;
         const int DEFAULT_MATRIC = -1;
@@ -17,11 +19,114 @@ namespace P1
         const int ID_MAX = 1000000;
         const int MIN_LOAN = 0;
         const int MIN_GRANT = 0;
-        const int MIN_DATE = 01000000;
-        const int MAX_DATE = 12319999;
-
+        const int MIN_DATE = 18000100;
+        const int MAX_DATE = 30001231;
+        const int MIN_THRESHOLD = 0;
+        const int MONTH_MOD = 10000;
+        const int DAY_MOD = 100;
+        const int MONTH_MAX = 1231;
+        const int MONTH_MIN = 101;
+        const int DAY_MAX = 31;
+        const int DAY_MIN = 1;
 
         private int studentID;
+        private int origLoan;
+        private int currLoan;
+        private int origGrant;
+        private int matriculation;
+        private int anticGrad;
+        private int origGrad;
+        private static int debtCap;
+        private bool overThreshold;
+
+        public debtStats(int id = DEFAULT_ID, int loan = DEFAULT_LOAN, int grant = DEFAULT_GRANT,
+            int matric = DEFAULT_MATRIC, int grad = DEFAULT_GRAD, int dCap = DEFAULT_DEBT_CAP, bool thresh = DEFAULT_THRESH)
+        {
+
+            studentID = id;
+            origLoan = loan;
+            origGrant = grant;
+            matriculation = matric;
+            origGrad = grad;
+            currLoan = origLoan;
+            anticGrad = origGrad;
+            debtCap = dCap;
+            overThreshold = thresh;
+        }
+
+        /*void generateID()
+         {
+            Random rndID = new Random();
+            studentID = rndID.Next(ID_MIN, ID_MAX);
+         }*/
+
+
+
+        public bool isOverThreshold()
+        {
+            if (overThreshold)
+                return true;
+            return false;
+        }
+
+        public void increaseLoan()
+        {
+            Console.WriteLine("Increase loan by: $");
+            CurrLoan = (currLoan += Convert.ToInt32(Console.ReadLine()));
+
+            if (currLoan <= debtCap)
+                overThreshold = OVER_THRESH;
+        }
+
+        public void decreaseLoan()
+        {
+            Console.WriteLine("Decrease loan by: $");
+            CurrLoan = (currLoan -= Convert.ToInt32(Console.ReadLine()));
+
+            if (currLoan < debtCap)
+                overThreshold = DEFAULT_THRESH;
+        }
+
+        public bool gradExten()
+        {
+            if (anticGrad > origGrad)
+                return true;
+            return false;
+        }
+        public int loanChange()
+        {
+            if (currLoan > origLoan)
+                return LOAN_INCREASE;
+            if (currLoan < origLoan)
+                return LOAN_DECREASE;
+            return NO_LOAN_CHNG;
+        }
+
+        public void deactivate()
+        {
+            studentID = DEFAULT_ID;
+            origLoan = DEFAULT_LOAN;
+            currLoan = DEFAULT_LOAN;
+            origGrant = DEFAULT_GRANT;
+            matriculation = DEFAULT_MATRIC;
+            anticGrad = DEFAULT_GRAD;
+            origGrad = DEFAULT_GRAD;
+        }
+
+        public bool debtExceed()
+        {
+            if (currLoan > debtCap)
+                return true;
+            return false;
+        }
+
+        public bool idMatch(int sID)
+        {
+            if (sID == studentID)
+                return true;
+            return false;
+        }
+
         public int StudentID
         {
             set
@@ -40,7 +145,7 @@ namespace P1
                     Console.WriteLine("Error. Student ID has already been set.");
             }
         }
-        private int origLoan;
+
         public int OrigLoan
         {
             set
@@ -58,10 +163,13 @@ namespace P1
                 }
                 else
                     Console.WriteLine("Error. Original Loan value has already been set.");
+
+                if (origLoan >= debtCap)
+                    overThreshold = OVER_THRESH;
             }
         }
-        private int currLoan;
-        public int CurrLoan
+
+        private int CurrLoan
         {
             set
             {
@@ -72,9 +180,12 @@ namespace P1
                     value = Convert.ToInt32(Console.ReadLine());
                 }
                 currLoan = value;
+
+                if (currLoan >= debtCap)
+                    overThreshold = OVER_THRESH;
             }
         }
-        private int origGrant;
+
         public int OrigGrant
         {
             set
@@ -88,49 +199,55 @@ namespace P1
                 origGrad = value;
             }
         }
-        private int matriculation;
+
         public int Matriculation
         {
             set
             {
                 if (matriculation == DEFAULT_MATRIC)
                 {
-                    while (value < MIN_DATE || value > MAX_DATE)
+                    while (((value < MIN_DATE || value > MAX_DATE) &&
+                        ((value % MONTH_MOD) < MONTH_MIN) || (value % MONTH_MOD) > MONTH_MAX) &&
+                        ((value % DAY_MOD) < DAY_MIN) || ((value % DAY_MOD) > DAY_MAX))
                     {
-                        Console.WriteLine("Error. Date must be in DDMMYYYY format.");
+                        Console.WriteLine("Error. Date must be in YYYYMMDD format.");
                         Console.Write("Please reenter date: ");
                         value = Convert.ToInt32(Console.ReadLine());
                     }
-                        matriculation = value;
+                    matriculation = value;
                 }
                 else
                     Console.WriteLine("Error. Matriculation date has already been set.");
             }
         }
-        private int anticGrad;
+
         public int AnticGrad
         {
             set
             {
-                while (value < MIN_DATE || value > MAX_DATE)
+                while (((value < MIN_DATE || value > MAX_DATE) &&
+                        ((value % MONTH_MOD) < MONTH_MIN) || (value % MONTH_MOD) > MONTH_MAX) &&
+                        ((value % DAY_MOD) < DAY_MIN) || ((value % DAY_MOD) > DAY_MAX))
                 {
-                    Console.WriteLine("Error. Date must be in DDMMYYYY format.");
+                    Console.WriteLine("Error. Date must be in YYYYMMDD format.");
                     Console.Write("Please reenter date: ");
                     value = Convert.ToInt32(Console.ReadLine());
                 }
                 anticGrad = value;
             }
         }
-        private int origGrad;
+
         public int OrigGrad
         {
             set
             {
                 if (origGrad == DEFAULT_GRAD)
                 {
-                    while (value < MIN_DATE || value > MAX_DATE)
+                    while (((value < MIN_DATE || value > MAX_DATE) &&
+                        ((value % MONTH_MOD) < MONTH_MIN) || (value % MONTH_MOD) > MONTH_MAX) &&
+                        ((value % DAY_MOD) < DAY_MIN) || ((value % DAY_MOD) > DAY_MAX))
                     {
-                        Console.WriteLine("Error. Date must be in DDMMYYYY format.");
+                        Console.WriteLine("Error. Date must be in YYYYMMDD format.");
                         Console.Write("Please reenter date: ");
                         value = Convert.ToInt32(Console.ReadLine());
                     }
@@ -141,64 +258,19 @@ namespace P1
                     Console.WriteLine("Error. Original graduation date has already been set.");
             }
         }
-        
-        public debtStats(int id = DEFAULT_ID, int loan = DEFAULT_LOAN, int grant = DEFAULT_GRANT, 
-            int matric = DEFAULT_MATRIC, int grad = DEFAULT_GRAD)
-        {
-            studentID = id;
-            origLoan = loan;
-            origGrant = grant;
-            matriculation = matric;
-            origGrad = grad;
-            currLoan = origLoan;
-            anticGrad = origGrad;
-        }
 
-       /*void generateID()
+        public int DebtCap
         {
-           Random rndID = new Random();
-           studentID = rndID.Next(ID_MIN, ID_MAX);
-        }*/
-
-        public bool gradExten()
-        {
-            if (anticGrad > origGrad)
-                return true;
-            return false;
-        }
-        public int loanChange()
-        {
-            if (currLoan > origLoan)
-                return LOAN_INCREASE;
-            if (currLoan < origLoan)
-                return LOAN_DECREASE;
-            return NO_LOAN_CHNG;
-        } 
-
-        public void deactivate()
-        {
-            studentID = DEFAULT_ID;
-            origLoan = DEFAULT_LOAN;
-            currLoan = DEFAULT_LOAN;
-            origGrant = DEFAULT_GRANT;
-            matriculation = DEFAULT_MATRIC;
-            anticGrad = DEFAULT_GRAD;
-            origGrad = DEFAULT_GRAD;
-        }
-
-        public bool debtExceed()
-        {
-            if (currLoan > DEBT_CAP)
-                return true;
-            return false;
-        }
-
-        public bool idMatch(int sID)
-        {
-            if (sID == studentID)
-                return true;
-            return false;
+            set
+            {
+                while (value < MIN_THRESHOLD)
+                {
+                    Console.WriteLine("Error. Threshold must be positive.");
+                    Console.Write("Please reenter threshhold: $");
+                    value = Convert.ToInt32(Console.ReadLine());
+                }
+                debtCap = value;
+            }
         }
     }
-
 }
